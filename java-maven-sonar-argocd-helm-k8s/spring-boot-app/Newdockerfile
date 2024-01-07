@@ -1,0 +1,9 @@
+FROM adoptopenjdk/openjdk11:alpine-jre
+
+ARG path="java-maven-sonar-argocd-helm-k8s/spring-boot-app"
+
+WORKDIR /opt/app 
+
+COPY */${path}/target/spring-boot-web.jar   app.jar 
+
+ENTRYPOINT["java","-jar","app.jar"]
