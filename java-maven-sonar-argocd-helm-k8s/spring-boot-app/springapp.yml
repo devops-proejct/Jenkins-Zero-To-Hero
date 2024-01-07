@@ -1,0 +1,37 @@
+#to deploy directly into cluster, we placed manifest file here
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-app-dep
+  labels:
+    app: springapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: springapp
+  template:
+    metadata:
+      name: springpod
+      namespace: test
+      labels:
+        app: springapp 
+    spec:
+      containers:
+      - name: springappcon
+        image: kesav38/abhispring:${BUILD_NUMBER}
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1 
+kind: Service
+metadata:
+  name: springappsvc 
+spec:
+  type: NodePort
+  selector:
+    app: springapp
+  ports:
+  - port: 80
+    targetPort: 8080
+    
