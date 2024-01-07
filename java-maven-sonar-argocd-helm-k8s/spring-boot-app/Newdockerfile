@@ -1,10 +1,9 @@
 FROM adoptopenjdk/openjdk11:alpine-jre
 
-ARG path="/target/spring-boot-web.jar"
+ARG path="target/spring-boot-web.jar"
 
 WORKDIR /opt/app 
-RUN ls -lar .
-RUN pwd
+
 COPY ${path}   app.jar 
 
 ENTRYPOINT ["java","-jar","app.jar"]
