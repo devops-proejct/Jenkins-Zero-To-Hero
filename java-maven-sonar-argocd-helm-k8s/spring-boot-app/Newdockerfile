@@ -4,6 +4,6 @@ ARG path="/target/spring-boot-web.jar"
 
 WORKDIR /opt/app 
 
-COPY /${path}   app.jar 
+COPY ${path}   app.jar 
 
 ENTRYPOINT ["java","-jar","app.jar"]
