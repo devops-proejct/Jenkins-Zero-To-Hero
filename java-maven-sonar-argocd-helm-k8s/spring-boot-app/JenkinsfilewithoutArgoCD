@@ -1,0 +1,46 @@
+pipeline{
+    environment {
+        buildnumber = "${BUILD_NUMBER}"
+    }
+    agent any
+    tools {
+    maven "mvn"
+    }
+    stages{
+        stage('checkoutcode'){
+            steps{
+                git branch: 'main', url: 'https://github.com/devops-proejct/Jenkins-Zero-To-Hero.git'
+            }
+        }
+        stage('build'){
+            steps{
+                sh "cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package"
+            }
+        }
+        stage('sonaranalysis'){
+            steps{
+                withSonarQubeEnv('sonarserver') {
+                    sh "cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn sonar:sonar"
+                }
+            }
+        }
+        stage('dockerbuild&push'){
+            steps{
+                sh "cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && docker image build -f Newdockerfile -t kesav38/abhispring:${buildnumber} . --no-cache"
+                //docker pull adoptopenjdk/openjdk11:alpine-jre
+                withCredentials([string(credentialsId: 'dockerhub-cred', variable: 'dockerhub_cred')]) {
+                sh "docker login -u kesav38 -p ${dockerhub_cred}"
+                sh "docker push kesav38/abhispring:${buildnumber}"
+                }
+            }
+        }
+        stage('deploy to eks cluster'){
+            steps{
+                   sh "aws eks update-kubeconfig --name eks_demo --region ap-south-1"
+                //    sh "kubectl create namespace test"
+                sh "sed -i 's/Newtag/${buildnumber}/g' java-maven-sonar-argocd-helm-k8s/spring-boot-app/springapp.yml"
+                sh "cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && kubectl apply -f springapp.yml -n test"
+            }
+        }
+    }
+}
