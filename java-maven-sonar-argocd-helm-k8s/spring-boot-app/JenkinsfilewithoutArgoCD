@@ -6,6 +6,7 @@ pipeline{
     tools {
     maven "mvn"
     }
+    cleanWs externalDelete: '"Project repo is deleted in jenkins /var/lib/jenkins dir to save space"'
     stages{
         stage('checkoutcode'){
             steps{
