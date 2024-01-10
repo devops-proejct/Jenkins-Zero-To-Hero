@@ -6,7 +6,6 @@ pipeline{
     tools {
     maven "mvn"
     }
-    cleanWs externalDelete: '"Project repo is deleted in jenkins /var/lib/jenkins dir to save space"'
     stages{
         stage('checkoutcode'){
             steps{
@@ -43,6 +42,11 @@ pipeline{
                 sh "cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && kubectl apply -f springapp.yml -n test"
                 sh "cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && sleep 1m && kubectl delete -f springapp.yml -n test"
             }
+        }
+    }
+    post {
+        Always{
+              cleanWs externalDelete: '"Project repo is deleted in jenkins /var/lib/jenkins dir to save space"'
         }
     }
 }
