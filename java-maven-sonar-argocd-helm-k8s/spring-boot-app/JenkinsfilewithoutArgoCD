@@ -44,8 +44,9 @@ pipeline{
             }
         }
     }
+//we added this post block to delete workspace after the completion of build or job
     post {
-        Always{
+        always{
               cleanWs externalDelete: '"Project repo is deleted in jenkins /var/lib/jenkins dir to save space"'
         }
     }
