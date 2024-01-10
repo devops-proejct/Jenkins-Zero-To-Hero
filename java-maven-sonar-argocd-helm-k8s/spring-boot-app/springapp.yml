@@ -28,7 +28,7 @@ kind: Service
 metadata:
   name: springappsvc 
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: springapp
   ports:
