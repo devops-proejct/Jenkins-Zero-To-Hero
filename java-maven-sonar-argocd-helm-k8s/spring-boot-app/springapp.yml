@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: springappcon
-        image: kesav38/abhispring:${BUILD_NUMBER}
+        image: kesav38/abhispring:${buildnumber}
         ports:
         - containerPort: 8080
 ---
