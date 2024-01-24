@@ -40,7 +40,7 @@ pipeline{
                   // sh "kubectl create namespace test"
                 sh "sed -i 's/Newtag/${buildnumber}/g' java-maven-sonar-argocd-helm-k8s/spring-boot-app/springapp.yml"
                 sh "cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && kubectl apply -f springapp.yml -n test"
-                sh "cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && sleep 5m && kubectl delete -f springapp.yml -n test"
+              //  sh "cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && sleep 5m && kubectl delete -f springapp.yml -n test"
             }
         }
     }
